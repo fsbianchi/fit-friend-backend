@@ -8,7 +8,7 @@ import { FilmesModule } from './usuario/filme.module.js';
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
-  imports: [UsuarioModule, FilmesModule,],
+  imports: [],
   controllers: [],
   providers: [],
 })
