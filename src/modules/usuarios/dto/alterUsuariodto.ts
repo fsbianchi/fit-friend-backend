@@ -15,7 +15,7 @@ export class alterUsuariodto {
     @IsOptional()
     // Documenta a propriedade no Swagger como opcional, definindo exemplo e descrição
     @ApiPropertyOptional({
-        example: 'Felipe Silva', // Exemplo fictício do nome para a documentação
+        example: 'Erica Ribeiro', // Exemplo fictício do nome para a documentação
         description: 'Tipo:String; Nome usado para identificar o usuário em telas, cadastros e etc' // Descrição no Swagger
     })
     // Declara a propriedade 'nome' do tipo string TypeScript
