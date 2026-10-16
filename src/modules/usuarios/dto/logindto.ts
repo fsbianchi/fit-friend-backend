@@ -11,7 +11,7 @@ export class Logindto {
         // Decorator do Swagger que adiciona documentação ao campo 'email' na interface Swagger/OpenAPI
     @ApiProperty({
                 // Define um exemplo fictício de e-mail que aparecerá na documentação do Swagger
-                example: 'felipe.silva.bianchi@gmail.com',
+                example: 'erica.ribeiro@email.com',
                 // Define a descrição do campo que será exibida no Swagger explicando seu formato e finalidade
                 description: 'Tipo:String/email; Email do usuário, usado para login, identificação e comunicados'
             })
