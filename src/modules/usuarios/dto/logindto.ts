@@ -25,7 +25,7 @@ export class Logindto {
     // Decorator do Swagger que adiciona documentação ao campo 'senha' na interface Swagger/OpenAPI
     @ApiProperty({
                 // Define um exemplo de senha para ilustrar o formato na documentação do Swagger
-                example: 'SenhaForte@1234567',
+                example: '#alocar depois',
                 // Define a descrição informando o tipo e os requisitos de segurança da senha
                 description: 'Tipo:String; Senha usada para login, deve seguir padrão de segurança minimo, evitando padrões.'
             })
