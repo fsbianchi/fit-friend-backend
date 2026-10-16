@@ -57,13 +57,24 @@ export class UsuariosCadastrados {
     const usuario = this.usuarios.find((u) => u.id === id);
     return usuario || null;
   }
+// 5. Apaga usuario
+  async apagaUsuario(id:string){
+        let possivelUsuario = this.retornaUsuarioID(id);
 
-  // 5. Atualizar dados do Usuário
+        this.#usuarios = this.#usuarios.filter(
+            usuarioSalvo => usuarioSalvo.id !== id
+        )
+
+        return possivelUsuario;
+    }
+
+  // 
   // Por enquando somente 
   // 1. Validação de Login usando a instância da Entity
   // 2. Cadastro de Novo Usuário
   // 3. Retornar todos os usuários
   // 4. Retornar usuário por ID
+  // 5. Apaga usuario
     return usuario.id;
   }
 }
