@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put } from "@
 import { UsuariosCadastrados } from "./usuario.service.js"; // Ajustado para PascalCase
 //import { CriaUsuarioDTO } from "./dto/criaUsuario.dto.js";
 //import { AlteraUsuarioDTO } from "./dto/alteraUsuario.dto.js";
-import { LoginUsuarioDTO } from "./dto/login.dto.js";
+import { Logindto } from "./dto/login.dto.js";
 
 @Controller('/usuarios')
 export class UsuarioController {
