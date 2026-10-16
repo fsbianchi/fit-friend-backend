@@ -81,7 +81,7 @@ export class alterUsuariodto {
     @IsOptional()
     // Documenta a propriedade no Swagger com exemplo e descrição
     @ApiPropertyOptional({
-            example: 'SenhaForte@1234567', // Exemplo de senha válida para a documentação
+            example: '#alocarsenha', // Exemplo de senha válida para a documentação
             description: 'Tipo:String; Senha usada para login, deve seguir padrão de segurança minimo, evitando padrões.' // Descrição no Swagger
         })
     // Declara a propriedade 'senha' do tipo string TypeScript
