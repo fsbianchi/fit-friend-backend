@@ -1,8 +1,8 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put } from "@nestjs/common";
 import { UsuariosCadastrados } from "./usuario.service.js"; // Ajustado para PascalCase
 import { CriaUsuarioDTO } from './dto/criaUsuario.dto.js';
-//import { AlteraUsuarioDTO } from "./dto/alteraUsuario.dto.js";
-import { Logindto } from "./dto/login.dto.js";
+import { alterUsuariodto } from "./dto/alterUsuariodto.js";
+import { Logindto } from "./dto/logindto.js";
 
 @Controller('/usuarios')
 export class UsuarioController {
@@ -10,7 +10,7 @@ export class UsuarioController {
 
   @Post('/login')
   @HttpCode(HttpStatus.OK)
-  async loginUsuario(@Body() loginDto: LoginUsuarioDTO) {
+  async loginUsuario(@Body() loginDto: Logindto) {
     const usuario = await this.usuariosService.validaLogin(loginDto.email, loginDto.senha);
 
     if (usuario) {
