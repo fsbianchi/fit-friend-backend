@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put } from "@nestjs/common";
 import { UsuariosCadastrados } from "./usuario.service.js"; // Ajustado para PascalCase
-//import { CriaUsuarioDTO } from "./dto/criaUsuario.dto.js";
+import { CriaUsuarioDTO } from './dto/criaUsuario.dto.js';
 //import { AlteraUsuarioDTO } from "./dto/alteraUsuario.dto.js";
 import { LoginUsuarioDTO } from "./dto/login.dto.js";
 
@@ -92,4 +92,4 @@ export class UsuarioController {
     };
   */
   }
-}
+

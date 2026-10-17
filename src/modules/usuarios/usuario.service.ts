@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { Usuario } from './entities/usuario.entity.js';
+import { Usuario } from './usuario.entity.js';
 import { CriaUsuarioDTO } from './dto/criaUsuario.dto.js';
-import { AlteraUsuarioDTO } from './dto/alteraUsuario.dto.js';
 
 @Injectable()
 export class UsuariosCadastrados {
@@ -16,8 +15,7 @@ export class UsuariosCadastrados {
       return null;
     }
 
-    // Utiliza o método de validação assíncrono da entidade Usuario
-    const senhaValida = await usuario.validarSenha(senhaTentativa);
+    const senhaValida = await usuario.login(senhaTentativa);
 
     if (senhaValida) {
       return usuario;
@@ -28,19 +26,18 @@ export class UsuariosCadastrados {
 
   // 2. Cadastro de Novo Usuário
   async adicionaUsuario(dadosUsuario: CriaUsuarioDTO): Promise<string | null> {
-    const id = dadosUsuario.id || randomUUID();
+    const id = randomUUID();
 
-    // Cria a instância da Entity, o que já executa o hash da senha no construtor
-    const novoUsuario = new Usuario(
-      id,
-      dadosUsuario.nome,
-      dadosUsuario.idade,
-      dadosUsuario.cidade,
-      dadosUsuario.email,
-      dadosUsuario.telefone,
-      dadosUsuario.senha,
-      dadosUsuario.endereco
-    );
+        const novoUsuario = new Usuario(
+  id,
+  dadosUsuario.nome,
+  dadosUsuario.idade,
+  dadosUsuario.cidade,
+  dadosUsuario.email,
+  dadosUsuario.telefone,
+  dadosUsuario.senha,
+  dadosUsuario.endereco || '' // Garante que nunca passa undefined
+ );
 
     this.usuarios.push(novoUsuario);
 
@@ -57,24 +54,19 @@ export class UsuariosCadastrados {
     const usuario = this.usuarios.find((u) => u.id === id);
     return usuario || null;
   }
-// 5. Apaga usuario
-  async apagaUsuario(id:string){
-        let possivelUsuario = this.retornaUsuarioID(id);
 
-        this.#usuarios = this.#usuarios.filter(
-            usuarioSalvo => usuarioSalvo.id !== id
-        )
+  // 5. Apaga usuário
+  async apagaUsuario(id: string): Promise<Usuario | null> {
+    const possivelUsuario = await this.retornaUsuarioID(id);
 
-        return possivelUsuario;
+    if (!possivelUsuario) {
+      return null;
     }
 
-  // 
-  // Por enquando somente 
-  // 1. Validação de Login usando a instância da Entity
-  // 2. Cadastro de Novo Usuário
-  // 3. Retornar todos os usuários
-  // 4. Retornar usuário por ID
-  // 5. Apaga usuario
-    return usuario.id;
+    this.usuarios = this.usuarios.filter(
+      (usuarioSalvo) => usuarioSalvo.id !== id
+    );
+
+    return possivelUsuario;
   }
 }
