@@ -1,72 +1,89 @@
-import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
-import { Usuario } from './usuario.entity.js';
-import { CriaUsuarioDTO } from './dto/criaUsuario.dto.js';
+import { Injectable } from "@nestjs/common";
+import { Usuario } from "./usuario.entity.js";
+import {v4 as uuid} from 'uuid';
+import { alterUsuariodto } from "./dto/alterUsuariodto.js";
 
 @Injectable()
-export class UsuariosCadastrados {
-  private usuarios: Usuario[] = [];
+export class UsuariosCadastrados{
+    #usuarios:Usuario[] = [];
 
-  // 1. Validação de Login usando a instância da Entity
-  async validaLogin(email: string, senhaTentativa: string): Promise<Usuario | null> {
-    const usuario = this.usuarios.find((u) => u.email === email);
+    constructor() {
 
-    if (!usuario) {
-      return null;
     }
 
-    const senhaValida = await usuario.login(senhaTentativa);
-
-    if (senhaValida) {
-      return usuario;
+    adicionaUsuario(dadosUsuario: any){
+        let usuario = new Usuario(uuid(), dadosUsuario.nome,
+                    dadosUsuario.idade, dadosUsuario.cidade, dadosUsuario.email, 
+                    dadosUsuario.telefone, dadosUsuario.senha, dadosUsuario.endereco
+        )
+        this.#usuarios.push(usuario);
+        return usuario.id;
     }
 
-    return null;
-  }
-
-  // 2. Cadastro de Novo Usuário
-  async adicionaUsuario(dadosUsuario: CriaUsuarioDTO): Promise<string | null> {
-    const id = randomUUID();
-
-        const novoUsuario = new Usuario(
-  id,
-  dadosUsuario.nome,
-  dadosUsuario.idade,
-  dadosUsuario.cidade,
-  dadosUsuario.email,
-  dadosUsuario.telefone,
-  dadosUsuario.senha,
-  dadosUsuario.endereco || '' // Garante que nunca passa undefined
- );
-
-    this.usuarios.push(novoUsuario);
-
-    return novoUsuario.id;
-  }
-
-  // 3. Retornar todos os usuários
-  async retornaUsuarios(): Promise<Usuario[]> {
-    return this.usuarios;
-  }
-
-  // 4. Retornar usuário por ID
-  async retornaUsuarioID(id: string): Promise<Usuario | null> {
-    const usuario = this.usuarios.find((u) => u.id === id);
-    return usuario || null;
-  }
-
-  // 5. Apaga usuário
-  async apagaUsuario(id: string): Promise<Usuario | null> {
-    const possivelUsuario = await this.retornaUsuarioID(id);
-
-    if (!possivelUsuario) {
-      return null;
+    retornaUsuarios(){
+        return this.#usuarios;
     }
 
-    this.usuarios = this.usuarios.filter(
-      (usuarioSalvo) => usuarioSalvo.id !== id
-    );
+    retornaUsuarioID(id:string){
+        const possivelUsuario = this.#usuarios.find(
+            usuarioSalvo => usuarioSalvo.id === id
+        )
+         if(!possivelUsuario){
+            throw new Error('Usuario não localizado')
+        }
+        return possivelUsuario;
+    }
 
-    return possivelUsuario;
-  }
+    async validaEmail(email: string){
+        const possivelUsuario = this.#usuarios.find(
+            usuario => usuario.email === email
+        );
+        return (possivelUsuario !== undefined);
+    }
+
+    async atualizaUsuario(id: string, dadosAtualizacao: alterUsuariodto){
+        let possivelUsuario = this.retornaUsuarioID(id);
+        Object.entries(dadosAtualizacao).forEach(
+            ([chave,valor]) => {
+                if(chave == 'id'){
+                    return;
+                }else if (valor === undefined) {
+                    return;
+                }else if( chave == 'senha'){
+                    possivelUsuario.trocaSenha(valor)
+                }
+                (possivelUsuario as any)[chave] = valor;
+            }
+        )
+        return possivelUsuario.id;
+    }
+
+    async apagaUsuario(id:string){
+        let possivelUsuario = this.retornaUsuarioID(id);
+
+        this.#usuarios = this.#usuarios.filter(
+            usuarioSalvo => usuarioSalvo.id !== id
+        )
+
+        return possivelUsuario;
+    }
+
+    async buscaEmail(email:string){
+        const possivelUsuario = this.#usuarios.find(
+            usuario => usuario.email === email
+        );
+        if(!possivelUsuario){
+            throw new Error('Usuario não localizado')
+        }
+        return possivelUsuario;
+    }
+
+    async validaLogin(email:string, senha:string){
+        const possivelUsuario = await this.buscaEmail(email)
+        if (possivelUsuario.login(senha)){
+            return possivelUsuario;
+        }else{
+            return null ;
+        }
+    }
 }
