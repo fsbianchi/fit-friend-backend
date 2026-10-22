@@ -1,9 +1,9 @@
 // Importa os decorators de validação do 'class-validator' para checar tipos, opcionalidade e tamanho mínimo
 import { IsEmail, IsNumber, IsOptional, IsString, MinLength } from "class-validator";
 // Importa o validador customizado que verifica se o e-mail já está cadastrado no sistema
-import { EmailUnico } from "../validator/emailUnico.validator.js";
+import { EmailUnico } from "../validainfo/emailValidainfo.js";
 // Importa o validador customizado que verifica se a senha atende aos requisitos de segurança
-import { SenhaForte } from "../validator/senhaForte.validator.js";
+import { SenhaForte } from "../validainfo/senhaValidainfo.js";
 // Importa o decorator do Swagger para documentar propriedades opcionais na API
 import { ApiPropertyOptional } from "@nestjs/swagger";
 
