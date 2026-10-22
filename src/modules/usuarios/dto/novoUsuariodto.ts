@@ -2,10 +2,10 @@
 import { IsEmail, IsNumber, IsString, MinLength } from "class-validator";
 
 // Importa o validador customizado que verifica se o e-mail já foi cadastrado no sistema
-import { EmailUnico } from "../validator/emailUnico.validator.js";
+import { EmailUnico } from "../validainfo/emailValidainfo.js";
 
 // Importa o validador customizado que garante que a senha atenda aos critérios de segurança
-import { SenhaForte } from "../validator/senhaForte.validator.js";
+import { SenhaForte } from "../validainfo/senhaValidainfo.js";
 
 // Importa o decorator do Swagger para documentar campos obrigatórios na API/OpenAPI
 import { ApiProperty } from "@nestjs/swagger";
