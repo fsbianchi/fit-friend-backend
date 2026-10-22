@@ -75,8 +75,8 @@ export class UsuarioController {
     };
   }
 
- /* @Put('/:id')
-  async atualizaUsuario(@Param('id') id: string, @Body() novosDados: AlteraUsuarioDTO) {
+  @Put('/:id')
+  async atualizaUsuario(@Param('id') id: string, @Body() novosDados: alterUsuariodto) {
     const retorno = await this.usuariosService.atualizaUsuario(id, novosDados);
 
     if (retorno) {
@@ -90,6 +90,6 @@ export class UsuarioController {
       message: "Usuário não localizado para atualização",
       id: null,
     };
-  */
+  
   }
-
+}
