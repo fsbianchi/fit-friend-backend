@@ -1,37 +1,55 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
-import { Usuario } from '../usuarios/usuario.entity.js';
+import { Controller, Get, Post, Body, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import {ApiTags,ApiOperation,ApiResponse,ApiParam,ApiNotFoundResponse,ApiCreatedResponse,} from '@nestjs/swagger';
+import { TreinoService } from './treino.service.js';
+import { CreateTreinoDto } from './dto/create-treino.dto.js';
+import { Treino } from './treino.entity.js';
 
-@Entity('treinos')
-export class Treino {
-  @ApiProperty({
-    description: 'Identificador único do treino (UUID)',
-    example: 'd3b07384-d113-424a-a71f-0e10405106a7',
+@ApiTags('Treinos')
+@Controller('treinos')
+export class TreinoController {
+  constructor(private readonly treinoService: TreinoService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Cadastrar um novo treino' })
+  @ApiCreatedResponse({
+    description: 'Treino criado com sucesso.',
+    type: Treino,
   })
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @ApiNotFoundResponse({ description: 'Usuário informado não foi encontrado.' })
+  async criar(@Body() createTreinoDto: CreateTreinoDto): Promise<Treino> {
+    return await this.treinoService.criar(createTreinoDto);
+  }
 
-  @ApiProperty({ example: 'Musculação' })
-  @Column()
-  esporte: string;
+  @Get()
+  @ApiOperation({ summary: 'Listar todos os treinos cadastrados' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de treinos retornada com sucesso.',
+    type: [Treino],
+  })
+  async listarTodos(): Promise<Treino[]> {
+    return await this.treinoService.listarTodos();
+  }
 
-  @ApiProperty({ example: 'Hipertrofia - Membros Superiores' })
-  @Column()
-  foco: string;
+  @Get(':id')
+  @ApiOperation({ summary: 'Buscar um treino pelo ID' })
+  @ApiParam({ name: 'id', description: 'ID do treino (UUID)', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Treino encontrado com sucesso.',
+    type: Treino,
+  })
+  @ApiNotFoundResponse({ description: 'Treino não encontrado.' })
+  async buscarPorId(@Param('id', ParseUUIDPipe) id: string): Promise<Treino> {
+    return await this.treinoService.buscarPorId(id);
+  }
 
-  @ApiProperty({ example: '1h 30min' })
-  @Column({ name: 'duracao_estimada' })
-  duracaoEstimada: string;
-
-  @ApiProperty({ example: 'Segunda-feira' })
-  @Column()
-  dia: string;
-
-  @ApiProperty({ example: ['Supino Reto', 'Desenvolvimento'] })
-  @Column('simple-array', { name: 'exercicios_principais' })
-  exerciciosPrincipais: string[];
-
-  @ApiProperty({ type: () => Usuario })
-  @ManyToOne(() => Usuario, (usuario) => usuario.treinos, { onDelete: 'CASCADE' })
-  usuario: Usuario;
+  @Delete(':id')
+  @ApiOperation({ summary: 'Remover um treino pelo ID' })
+  @ApiParam({ name: 'id', description: 'ID do treino (UUID)', type: String })
+  @ApiResponse({ status: 200, description: 'Treino removido com sucesso.' })
+  @ApiNotFoundResponse({ description: 'Treino não encontrado.' })
+  async remover(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    return await this.treinoService.remover(id);
+  }
 }
