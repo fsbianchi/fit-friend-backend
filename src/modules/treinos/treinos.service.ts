@@ -24,7 +24,8 @@ export class TreinoService {
     }
 
     const novoTreino = this.treinoRepository.create({
-      ...createTreinoDto,
+      titulo: createTreinoDto.titulo,
+      descricao: createTreinoDto.descricao,
       usuario,
     });
 
