@@ -1,37 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
 import { Usuario } from '../usuarios/usuario.entity.js';
 
-@Entity('treinos')
+@Entity({ name: 'tb_treinos' })
 export class Treino {
-  @ApiProperty({
-    description: 'Identificador único do treino (UUID)',
-    example: 'd3b07384-d113-424a-a71f-0e10405106a7',
-  })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ example: 'Musculação' })
-  @Column()
-  esporte: string;
+  @Column({ length: 100, nullable: false })
+  titulo: string; // Ex: "Futebol", "Musculação", "Corrida"
 
-  @ApiProperty({ example: 'Hipertrofia - Membros Superiores' })
-  @Column()
-  foco: string;
+  @Column({ type: 'text', nullable: false })
+  descricao: string; // Caixa de texto livre contendo todas as observações do esporte/treino
 
-  @ApiProperty({ example: '1h 30min' })
-  @Column({ name: 'duracao_estimada' })
-  duracaoEstimada: string;
+  @CreateDateColumn()
+  dataCriacao: Date;
 
-  @ApiProperty({ example: 'Segunda-feira' })
-  @Column()
-  dia: string;
-
-  @ApiProperty({ example: ['Supino Reto', 'Desenvolvimento'] })
-  @Column('simple-array', { name: 'exercicios_principais' })
-  exerciciosPrincipais: string[];
-
-  @ApiProperty({ type: () => Usuario })
-  @ManyToOne(() => Usuario, (usuario) => usuario.treinos, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Usuario, (usuario) => usuario.treinos, {
+    onDelete: 'CASCADE',
+  })
   usuario: Usuario;
 }
