@@ -1,11 +1,15 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module.js';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
+  // Ativa as validações dos DTOs (class-validator). Sem isso, os @IsNotEmpty etc. são ignorados.
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+
   // Permite que o front-end (React) consiga comunicar com esta API
   app.enableCors();
 
@@ -15,6 +19,7 @@ async function bootstrap() {
     .setDescription('Documentação da API do projeto integrador.')
     .setVersion('1.0')
     .addTag('usuarios')
+    .addTag('timeline')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

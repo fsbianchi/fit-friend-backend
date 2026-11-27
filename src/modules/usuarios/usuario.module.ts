@@ -6,5 +6,6 @@ import { UsuariosCadastrados } from './usuario.service.js';
   imports: [],
   controllers: [UsuarioController],
   providers: [UsuariosCadastrados],
+  exports: [UsuariosCadastrados], // <-- novo: permite o TimelineModule usar o service
 })
 export class UsuarioModule {}
